@@ -29,6 +29,7 @@ float heading_pid_output;
 
 float desired_roll_value;
 float desired_pitch_value;
+float desired_heading_value;
 
 int MIN = 1100;
 int MAX = 1900;
@@ -39,7 +40,7 @@ Sensor pressure(SENSOR_ID_BARO);
 
 PID_LOOP ROLL_PID(2.0, 0, 0.4);
 PID_LOOP PITCH_PID(2.0, 0, 0);
-PID_LOOP HEADING_PID(0.5, 0, 0);
+PID_LOOP HEADING_PID(2.0, 0, 0);
 
 void setup() {
   // put your setup code here, to run once:
@@ -129,6 +130,14 @@ void receiveEvent(int howMany){
 
  
       //Change desired angles and throttle here!
+
+    } else if(commandsChar[1] == 'H') {
+
+      Serial.println("Fly onto heading!");
+
+      desired_heading_value = 100*(commandsChar[2] - '0') + 10*(commandsChar[3] - '0') + commandsChar[4] - '0';
+
+      Serial.println(desired_heading_value);
       
     } else if(commandsChar[0] == 'A') {
 
@@ -147,13 +156,15 @@ void loop() {
 
   BHY2.update();
 
-  roll_pid_output = ROLL_PID.compute_loop(desired_roll_value, orientation.roll());
   pitch_pid_output = PITCH_PID.compute_loop(desired_pitch_value, orientation.pitch());
-  heading_pid_output = HEADING_PID.compute_loop(0, orientation.heading());
+  heading_pid_output = HEADING_PID.compute_heading_loop(desired_heading_value, orientation.heading());
+
+  desired_roll_value = map(heading_pid_output, -90*HEADING_PID.getPTerm(), 90*HEADING_PID.getPTerm(), -45, 45);
+
+  roll_pid_output = ROLL_PID.compute_loop(desired_roll_value, orientation.roll());
 
   motor1Angle = map(roll_pid_output, -90*ROLL_PID.getPTerm(), 90*ROLL_PID.getPTerm(), 0, 180);
   motor2Angle = map(pitch_pid_output, -90*PITCH_PID.getPTerm(), 90*PITCH_PID.getPTerm(), 0, 180);
-  motor3Angle = map(heading_pid_output, -90*PITCH_PID.getPTerm(), 90*PITCH_PID.getPTerm(), 0, 180);
 
   Motor1.write(int(motor1Angle));
   Motor2.write(int(180-motor2Angle));
