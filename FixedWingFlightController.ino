@@ -71,6 +71,7 @@ void setup() {
 
   desired_roll_value = 0;
   desired_pitch_value = 15;
+  desired_heading_value = 0;
   
 }
 
@@ -128,7 +129,6 @@ void receiveEvent(int howMany){
       Serial.println(desired_pitch_value);
       Serial.println(throttleValue);
 
- 
       //Change desired angles and throttle here!
 
     } else if(commandsChar[1] == 'H') {
@@ -160,6 +160,7 @@ void loop() {
   heading_pid_output = HEADING_PID.compute_heading_loop(desired_heading_value, orientation.heading());
 
   desired_roll_value = map(heading_pid_output, -90*HEADING_PID.getPTerm(), 90*HEADING_PID.getPTerm(), -45, 45);
+  desired_pitch_value = map(altitude_pid_output, )
 
   roll_pid_output = ROLL_PID.compute_loop(desired_roll_value, orientation.roll());
 

@@ -1,0 +1,12 @@
+class Waypoint:
+	
+	def __init__(self, Latitude, Longitude):
+
+		self.Latitude = Latitude
+		self.Longitude = Longitude
+		self.Altitude = None
+
+	def setAltitude(self, Altitude):
+
+		self.Altitude
+
