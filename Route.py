@@ -17,13 +17,13 @@ class Route:
 
 	def calculateHeadingToCurrentWaypoint(self, currentGPSPosition):
 
-		bearingToCoordinate = getBearing(currentGPSPosition[0], currentGPSPosition[1], self.listOfWaypoints[self.currentWaypointIndex][0], self.listOfWaypoints[self.currentWaypointIndex][1])
+		bearingToCoordinate = getBearing(currentGPSPosition[0], currentGPSPosition[1], self.listOfWaypoints[self.currentWaypointIndex].Latitude, self.listOfWaypoints[self.currentWaypointIndex].Longitude)
 
 		return bearingToCoordinate
 
 	def waypointReached(self, currentGPSPosition, toleranceDistance=0.005):
 
-		distance = calculateDistanceBetweenCoordinates(currentGPSPosition[0], currentGPSPosition[1], self.listOfWaypoints[self.currentWaypointIndex][0], self.listOfWaypoints[self.currentWaypointIndex][1])
+		distance = calculateDistanceBetweenCoordinates(currentGPSPosition[0], currentGPSPosition[1], self.listOfWaypoints[self.currentWaypointIndex].Latitude, self.listOfWaypoints[self.currentWaypointIndex].Longitude)
 
 		if distance <= toleranceDistance:
 

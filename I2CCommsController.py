@@ -1,4 +1,4 @@
-#from smbus import SMBus
+from smbus import SMBus
 
 class I2CCommsController:
 
@@ -8,7 +8,7 @@ class I2CCommsController:
 		self.I2CWrite = 0x01
 		self.I2CRead = 0x02
 
-		#self.bus = SMBus(1)
+		self.bus = SMBus(1)
 
 	def convertStringToByte(self, src):
 		
@@ -23,7 +23,7 @@ class I2CCommsController:
 
 		sendString = 'H '+ str(heading) + ' '
 
-		#self.bus.write_i2c_block_data(self.I2CAddress, self.I2CWrite, self.convertStringToByte(sendString))
+		self.bus.write_i2c_block_data(self.I2CAddress, self.I2CWrite, self.convertStringToByte(sendString))
 
 		print(sendString)
 
@@ -33,7 +33,7 @@ class I2CCommsController:
 
 		sendString = 'A '+ str(altitude) + ' '
 
-		#self.bus.write_i2c_block_data(self.I2CAddress, self.I2CWrite, self.convertStringToByte(sendString))
+		self.bus.write_i2c_block_data(self.I2CAddress, self.I2CWrite, self.convertStringToByte(sendString))
 
 		print(sendString)
 
@@ -43,7 +43,7 @@ class I2CCommsController:
 
 		sendString = 'R '+ roll +' P '+ pitch +' T '+ throttle + '  '
 
-		#self.bus.write_i2c_block_data(self.I2CAddress, self.I2CWrite, self.convertStringToByte(sendString))
+		self.bus.write_i2c_block_data(self.I2CAddress, self.I2CWrite, self.convertStringToByte(sendString))
 
 		print(sendString)
 

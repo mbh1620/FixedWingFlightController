@@ -38,9 +38,10 @@ Sensor device_orientation(SENSOR_ID_DEVICE_ORI);
 SensorOrientation orientation(SENSOR_ID_ORI);
 Sensor pressure(SENSOR_ID_BARO);
 
-PID_LOOP ROLL_PID(2.0, 0, 0.4);
-PID_LOOP PITCH_PID(2.0, 0, 0);
-PID_LOOP HEADING_PID(2.0, 0, 0);
+PID_LOOP ROLL_PID(3.0, 0, 0.4); //Primary Loop
+PID_LOOP PITCH_PID(3.0, 0, 0);  //Primary Loop
+PID_LOOP HEADING_PID(1.5, 0, 0);  //Secondary Loop
+PID_LOOP ALTITUDE_PID(1.5, 0, 0); //Secondary Loop
 
 void setup() {
   // put your setup code here, to run once:
@@ -160,7 +161,7 @@ void loop() {
   heading_pid_output = HEADING_PID.compute_heading_loop(desired_heading_value, orientation.heading());
 
   desired_roll_value = map(heading_pid_output, -90*HEADING_PID.getPTerm(), 90*HEADING_PID.getPTerm(), -45, 45);
-  desired_pitch_value = map(altitude_pid_output, )
+//  desired_pitch_value = map(altitude_pid_output, )
 
   roll_pid_output = ROLL_PID.compute_loop(desired_roll_value, orientation.roll());
 
