@@ -38,9 +38,9 @@ Sensor device_orientation(SENSOR_ID_DEVICE_ORI);
 SensorOrientation orientation(SENSOR_ID_ORI);
 Sensor pressure(SENSOR_ID_BARO);
 
-PID_LOOP ROLL_PID(3.0, 0, 0.4); //Primary Loop
-PID_LOOP PITCH_PID(3.0, 0, 0);  //Primary Loop
-PID_LOOP HEADING_PID(1.5, 0, 0);  //Secondary Loop
+PID_LOOP ROLL_PID(2.5, 0, 0.4); //Primary Loop
+PID_LOOP PITCH_PID(2.5, 0, 0);  //Primary Loop
+PID_LOOP HEADING_PID(1.5, 0, 0.4);  //Secondary Loop
 PID_LOOP ALTITUDE_PID(1.5, 0, 0); //Secondary Loop
 
 void setup() {
@@ -157,15 +157,18 @@ void loop() {
 
   BHY2.update();
 
-  pitch_pid_output = PITCH_PID.compute_loop(desired_pitch_value, orientation.pitch());
+//  altitude_pid_output = ALTITUDE_PID.compute_loop(desired_altitude_value, altitude_value);
   heading_pid_output = HEADING_PID.compute_heading_loop(desired_heading_value, orientation.heading());
 
   desired_roll_value = map(heading_pid_output, -90*HEADING_PID.getPTerm(), 90*HEADING_PID.getPTerm(), -45, 45);
-//  desired_pitch_value = map(altitude_pid_output, )
+  desired_roll_value = constrain(desired_roll_value, -30, 30); //Limit the max roll value to -45 and 45
 
+//  desired_pitch_value = map(altitude_pid_output, -45,45)
+
+  pitch_pid_output = PITCH_PID.compute_loop(desired_pitch_value, orientation.pitch());
   roll_pid_output = ROLL_PID.compute_loop(desired_roll_value, orientation.roll());
 
-  motor1Angle = map(roll_pid_output, -90*ROLL_PID.getPTerm(), 90*ROLL_PID.getPTerm(), 0, 180);
+  motor1Angle = map(roll_pid_output, -30*ROLL_PID.getPTerm(), 30*ROLL_PID.getPTerm(), 0, 180);
   motor2Angle = map(pitch_pid_output, -90*PITCH_PID.getPTerm(), 90*PITCH_PID.getPTerm(), 0, 180);
 
   Motor1.write(int(motor1Angle));
